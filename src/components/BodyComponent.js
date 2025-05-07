@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 //import { restaurantList } from "../constants.js";
 import RestaurantCard from "./RestaurantCard";
 import ShimmerComponent from "./ShimmerComponent.js";
@@ -6,11 +6,13 @@ import { Link } from "react-router-dom";
 import { filterData } from "../utils/helper.js";
 import useOnline from "../utils/useOnline.js";
 //import useAllRestaurants from "../utils/useAllRestaurants.js";
+import UserContext from "../utils/UserContext.js";
 
   const BodyComponent = () => {
      const [allRestaurants, setAllRestaurants] = useState([])
      const [filteredRestaurants, setFilteredRestaurants] = useState([])
     const [searchText, setSearchText] = useState("")
+    const {user, setUser} = useContext(UserContext);
 
     //const {restaurantList, filteredRestaurants} = useAllRestaurants();
 
@@ -36,16 +38,16 @@ import useOnline from "../utils/useOnline.js";
 
     return allRestaurants.length === 0 ? (<ShimmerComponent/>) : (
       <>
-        <div className="search-container">
+        <div className="search-container p-5 bg-pink-50 my-2">
           <input type="text" 
-          className="search-input" 
+          className="focus:bg-green-100 p-2 m-2" 
           placeholder="Search" 
           value={searchText}
           onChange={(e) => {
             setSearchText(e.target.value)
           }}/>
           <button 
-          className="search-btn"
+          className="p-2 m-2 bg-purple-700 hover:bg-green-600 text-white rounded-md"
           // need to filter data
           // filter the restaurants based on the searchText 
           onClick={() => {
@@ -53,9 +55,15 @@ import useOnline from "../utils/useOnline.js";
             const data = filterData(searchText, allRestaurants);
             setFilteredRestaurants(data)
           }}>Search</button>
+          <input value={user.name} onChange={e => {
+            setUser({
+              name: e.target.value,
+              email: "new@gmail.com"
+            })
+          }}></input>
         </div>
 
-        <div className='restaurant-list'>
+        <div className='flex flex-wrap'>
           {/* code from coo-pilot*/}
           {filteredRestaurants.map((restaurantObj) => (
             <Link to={"/restaurant/"+ restaurantObj.info.id} key={restaurantObj.info.id}>

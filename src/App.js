@@ -7,7 +7,10 @@ import AboutUsComponent from './components/AboutUsComponent.js'
 import ErrorComponent from './components/ErrorComponent.js';
 import RestaurantMenuComponent from './components/RestaurantMenuComponent.js';
 import ProfileComponent from './components/ProfileComponent.js';
-
+//import Instamart from './components/Instamart.js';
+import { lazy, Suspense, useState } from 'react';
+import ShimmerComponent from './components/ShimmerComponent.js';
+import UserContext from './utils/UserContext.js';
 
 // function App(){
 //   return(
@@ -18,12 +21,25 @@ import ProfileComponent from './components/ProfileComponent.js';
 //     </div>
 //    );
 // }
+const Instamart = lazy(() => import("./components/Instamart.js"))
+
 function Layout() {
+  const [user, setUser]= useState({
+    name: "saeel",
+    email:"saeel@gmail.com"
+  })
   return ( 
     <div className="App">
-      <HeaderComponent/>
-      <Outlet/>
-      <FooterComponent/>
+      <UserContext.Provider value={
+        {
+          user:user,
+          setUser:setUser
+        }
+      }>
+        <HeaderComponent/>
+        <Outlet/>
+        <FooterComponent/>
+      </UserContext.Provider>
     </div>
   );
 }
@@ -35,7 +51,8 @@ const appRouter = createBrowserRouter([
       {path:"/about", element:<AboutUsComponent/>, children: [ 
         {path: "profile", Component: ProfileComponent}
       ]},
-      {path:"/restaurant/:id", element:<RestaurantMenuComponent/>}
+      {path:"/restaurant/:id", element:<RestaurantMenuComponent/>},
+      {path:"/instamart", element:<Suspense fallback={<ShimmerComponent/>}><Instamart/></Suspense>}
     ],
   },
 ]);
