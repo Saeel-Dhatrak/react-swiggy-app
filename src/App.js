@@ -11,7 +11,10 @@ import ProfileComponent from './components/ProfileComponent.js';
 import { lazy, Suspense, useState } from 'react';
 import ShimmerComponent from './components/ShimmerComponent.js';
 import UserContext from './utils/UserContext.js';
-
+import { Provider } from 'react-redux';
+import store from './utils/store.js';
+import Cart from './components/Cart.js';
+ 
 // function App(){
 //   return(
 //     <div className="App">
@@ -30,16 +33,18 @@ function Layout() {
   })
   return ( 
     <div className="App">
-      <UserContext.Provider value={
-        {
-          user:user,
-          setUser:setUser
-        }
-      }>
-        <HeaderComponent/>
-        <Outlet/>
-        <FooterComponent/>
-      </UserContext.Provider>
+      <Provider store={store}>
+        <UserContext.Provider value={
+          {
+            user:user,
+            setUser:setUser
+          }
+        }>
+          <HeaderComponent/>
+          <Outlet/>
+          <FooterComponent/>
+        </UserContext.Provider>
+      </Provider>
     </div>
   );
 }
@@ -52,7 +57,8 @@ const appRouter = createBrowserRouter([
         {path: "profile", Component: ProfileComponent}
       ]},
       {path:"/restaurant/:id", element:<RestaurantMenuComponent/>},
-      {path:"/instamart", element:<Suspense fallback={<ShimmerComponent/>}><Instamart/></Suspense>}
+      {path:"/instamart", element:<Suspense fallback={<ShimmerComponent/>}><Instamart/></Suspense>},
+      {path:"/cart", element:<Cart/>}
     ],
   },
 ]);

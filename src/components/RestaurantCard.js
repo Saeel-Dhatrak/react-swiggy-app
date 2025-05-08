@@ -9,7 +9,7 @@ const RestaurantCard = ({restaurant}) =>{
           <img alt='logo' src={IMG_CDN_URL + restaurant.cloudinaryImageId}/>
           <h2 className="font-bold text-xl">{restaurant.name}</h2>
           <h3>{restaurant.areaName}</h3>
-          <h4>{restaurant.avgRating} stars</h4>
+          <h4>{restaurant.avgRating} stars</h4>Defe
         </div>
       </>
     )
